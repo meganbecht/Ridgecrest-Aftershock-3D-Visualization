@@ -9,7 +9,7 @@ The visualization uses:
 - Ridgecrest fault trace shapefile data
 - Python + VTK for rendering
 
-This README focuses only on how to set up and run the project with the fault lines included.
+This README explains how to set up and run the project with the fault lines included.
 
 ---
 
@@ -26,14 +26,18 @@ CS530_Final_Project/
 └── data/
     ├── ridgecrest_aftershocks_cleaned.csv
     ├── ridgecrest_dem.tiff
-    ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
-    ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.shx
-    ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.dbf
-    ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.prj
-    └── any other shapefile sidecar files
-```
+    │
+    └── Surface_Rupture_Ridgecrest_Prov_Rel_1/
+        ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.cpg
+        ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.dbf
+        ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.prj
+        ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.qpj
+        ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
+        ├── Surface_Rupture_Ridgecrest_Prov_Rel_1.shx
+        └── Surface_Rupture_Ridgecrest_Prov_Rel_1.xml
+````
 
-The important part is that the `data` folder must be in the same folder as `ridgecrest_viewer.py`.
+The important part is that `data/` must be in the same folder as `ridgecrest_viewer.py`.
 
 ---
 
@@ -43,7 +47,13 @@ The fault lines are loaded from a shapefile.
 
 A shapefile is not just one file. The `.shp` file depends on several sidecar files with the same base name.
 
-At minimum, the following files should be together in the `data` folder:
+At minimum, the following files should be together in this folder:
+
+```text
+data/Surface_Rupture_Ridgecrest_Prov_Rel_1/
+```
+
+Required shapefile files:
 
 ```text
 Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
@@ -51,13 +61,14 @@ Surface_Rupture_Ridgecrest_Prov_Rel_1.shx
 Surface_Rupture_Ridgecrest_Prov_Rel_1.dbf
 ```
 
-It is also recommended to include:
+Recommended additional files:
 
 ```text
 Surface_Rupture_Ridgecrest_Prov_Rel_1.prj
+Surface_Rupture_Ridgecrest_Prov_Rel_1.cpg
+Surface_Rupture_Ridgecrest_Prov_Rel_1.qpj
+Surface_Rupture_Ridgecrest_Prov_Rel_1.xml
 ```
-
-and any other files that came with the shapefile download.
 
 If only the `.shp` file is included and the `.shx` or `.dbf` files are missing, the fault traces may not load correctly.
 
@@ -116,12 +127,12 @@ After activation, the terminal prompt should show something like `(.venv)`.
 From the root project folder, run:
 
 ```bash
-python ridgecrest_viewer.py --input data/ridgecrest_aftershocks_cleaned.csv --dem data/ridgecrest_dem.tiff --faults data/Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
+python ridgecrest_viewer.py -i data/ridgecrest_aftershocks_cleaned.csv --dem data/ridgecrest_dem.tiff --faults data/Surface_Rupture_Ridgecrest_Prov_Rel_1/Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
 ```
 
 This command tells the program:
 
-* `--input` is the cleaned earthquake catalog
+* `-i` is the cleaned earthquake catalog
 * `--dem` is the terrain elevation file
 * `--faults` is the Ridgecrest fault trace shapefile
 
@@ -143,6 +154,7 @@ You should see:
 * a time slider
 * checkboxes for contours, old events, fault traces, and depth mode
 * a play/pause button
+* elevation and magnitude colorbars
 
 If the fault lines are loaded correctly, the white fault traces should appear on top of the terrain when the `Fault traces` checkbox is selected.
 
@@ -181,6 +193,10 @@ Each earthquake is shown as a sphere.
 
 Recent events are shown more clearly. Older events fade over time to reduce clutter.
 
+### Mainshock Marker
+
+The largest event in the filtered catalog is treated as the mainshock. It is marked with a red marker so it remains easy to identify throughout the animation.
+
 ### Fault Lines
 
 The white lines show mapped Ridgecrest surface fault traces.
@@ -201,11 +217,8 @@ They are intended to show the general shape of where aftershocks are spatially c
 
 ## 9. Main Run Command
 
-In conclusion, the main command to run this project is:
+In conclusion, the main command to run the complete visualization is:
 
 ```bash
-python ridgecrest_viewer.py --input data/ridgecrest_aftershocks_cleaned.csv --dem data/ridgecrest_dem.tiff --faults data/Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
-```
-
-```
+python ridgecrest_viewer.py -i data/ridgecrest_aftershocks_cleaned.csv --dem data/ridgecrest_dem.tiff --faults data/Surface_Rupture_Ridgecrest_Prov_Rel_1/Surface_Rupture_Ridgecrest_Prov_Rel_1.shp
 ```
